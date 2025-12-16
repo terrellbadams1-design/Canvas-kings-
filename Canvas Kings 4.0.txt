@@ -1,0 +1,3024 @@
+class Fighter {
+  final String id;
+  String firstName;
+  String lastName;
+
+  int age;
+  String weightClass;
+
+  // Core attributes (0–100)
+  double power;
+  double speed;
+  double stamina;
+  double defense;
+  double chin;
+  double ringIQ;
+
+  // Career & condition
+  double health;
+  double readiness;
+  int injuryWeeks;
+  int popularity;
+  int wins;
+  int losses;
+  int draws;
+
+  // Camp & wear
+  double wearAndTear;
+
+  Fighter({
+    required this.id,
+    required this.firstName,
+    required this.lastName,
+    required this.age,
+    required this.weightClass,
+    required this.power,
+    required this.speed,
+    required this.stamina,
+    required this.defense,
+    required this.chin,
+    required this.ringIQ,
+    this.health = 100,
+    this.readiness = 75,
+    this.injuryWeeks = 0,
+    this.popularity = 50,
+    this.wins = 0,
+    this.losses = 0,
+    this.draws = 0,
+    this.wearAndTear = 0,
+  });
+
+  String get fullName => "$firstName $lastName";
+
+  bool get isInjured => injuryWeeks > 0;
+
+  void applyDamage(double amount) {
+    health -= amount;
+    if (health < 0) health = 0;
+  }
+
+  void recoverBetweenFights() {
+    health = 100;
+    readiness = (readiness + 10).clamp(0, 100);
+    if (injuryWeeks > 0) injuryWeeks--;
+  }
+
+  void addWear(double amount) {
+    wearAndTear += amount;
+    if (wearAndTear > 100) wearAndTear = 100;
+  }
+}
+
+enum BeltTier {
+  world,
+  prestige,
+  ring
+}
+
+class Belt {
+  final String id;
+  final String name;
+  final String weightClass;
+  final BeltTier tier;
+
+  String? currentChampionId;
+  List<String> lineage;
+
+  Belt({
+    required this.id,
+    required this.name,
+    required this.weightClass,
+    required this.tier,
+    this.currentChampionId,
+    List<String>? lineage,
+  }) : lineage = lineage ?? [];
+
+  void awardTo(String fighterId) {
+    currentChampionId = fighterId;
+    lineage.add(fighterId);
+  }
+
+  bool get isVacant => currentChampionId == null;
+}
+
+class Venue {
+  final String id;
+  final String name;
+  final String city;
+  final int capacity;
+  final double ticketMultiplier;
+  final double prestigeBoost;
+
+  Venue({
+    required this.id,
+    required this.name,
+    required this.city,
+    required this.capacity,
+    this.ticketMultiplier = 1.0,
+    this.prestigeBoost = 1.0,
+  });
+
+  double estimateGateRevenue(double avgTicketPrice) {
+    return capacity * avgTicketPrice * ticketMultiplier;
+  }
+}
+
+class Gym {
+  final String id;
+  String name;
+
+  int level;
+  int reputation;
+
+  bool hasEliteTrainer;
+  bool hasNutritionist;
+  bool hasCutman;
+
+  Gym({
+    required this.id,
+    required this.name,
+    this.level = 1,
+    this.reputation = 50,
+    this.hasEliteTrainer = false,
+    this.hasNutritionist = false,
+    this.hasCutman = false,
+  });
+
+  double get trainingBonus {
+    double bonus = 1.0;
+    if (hasEliteTrainer) bonus += 0.05;
+    if (hasNutritionist) bonus += 0.03;
+    if (hasCutman) bonus += 0.02;
+    return bonus;
+  }
+
+  void upgrade() {
+    level++;
+    reputation += 5;
+  }
+}
+
+class Promotion {
+  final String id;
+  final String name;
+
+  int prestige;
+  double revenueShare; // % fighter receives
+
+  Promotion({
+    required this.id,
+    required this.name,
+    this.prestige = 50,
+    this.revenueShare = 0.60,
+  });
+
+  double calculateFighterPurse(double totalRevenue) {
+    return totalRevenue * revenueShare;
+  }
+
+  void increasePrestige(int amount) {
+    prestige += amount;
+    if (prestige > 100) prestige = 100;
+  }
+}
+
+class Contract {
+  final String id;
+  final String promotionId;
+  final String fighterId;
+
+  int fightsRemaining;
+  double pursePercentage;
+  double signingBonus;
+
+  Contract({
+    required this.id,
+    required this.promotionId,
+    required this.fighterId,
+    this.fightsRemaining = 3,
+    this.pursePercentage = 0.60,
+    this.signingBonus = 0,
+  });
+
+  bool get isExpired => fightsRemaining <= 0;
+
+  void useFight() {
+    if (fightsRemaining > 0) {
+      fightsRemaining--;
+    }
+  }
+
+  double calculatePurse(double totalRevenue) {
+    return totalRevenue * pursePercentage;
+  }
+}
+
+class Contract {
+  final String id;
+  final String promotionId;
+  final String fighterId;
+
+  int fightsRemaining;
+  double pursePercentage;
+  double signingBonus;
+
+  Contract({
+    required this.id,
+    required this.promotionId,
+    required this.fighterId,
+    this.fightsRemaining = 3,
+    this.pursePercentage = 0.60,
+    this.signingBonus = 0,
+  });
+
+  bool get isExpired => fightsRemaining <= 0;
+
+  void useFight() {
+    if (fightsRemaining > 0) {
+      fightsRemaining--;
+    }
+  }
+
+  double calculatePurse(double totalRevenue) {
+    return totalRevenue * pursePercentage;
+  }
+}
+
+class Contract {
+  final String id;
+  final String promotionId;
+  final String fighterId;
+
+  int fightsRemaining;
+  double pursePercentage;
+  double signingBonus;
+
+  Contract({
+    required this.id,
+    required this.promotionId,
+    required this.fighterId,
+    this.fightsRemaining = 3,
+    this.pursePercentage = 0.60,
+    this.signingBonus = 0,
+  });
+
+  bool get isExpired => fightsRemaining <= 0;
+
+  void useFight() {
+    if (fightsRemaining > 0) {
+      fightsRemaining--;
+    }
+  }
+
+  double calculatePurse(double totalRevenue) {
+    return totalRevenue * pursePercentage;
+  }
+}
+
+class FightPreparationSummary {
+  final double readiness;
+  final double staminaBonus;
+  final double powerBonus;
+  final bool injuryConcern;
+  final String campGrade;
+
+  FightPreparationSummary({
+    required this.readiness,
+    required this.staminaBonus,
+    required this.powerBonus,
+    required this.injuryConcern,
+    required this.campGrade,
+  });
+}
+
+enum RivalReactionType {
+  ignore,
+  respect,
+  fear,
+  counterTrain,
+  trashTalk,
+}
+
+class RivalReaction {
+  final RivalReactionType type;
+  final String description;
+  final double difficultyModifier;
+  final double hypeModifier;
+
+  RivalReaction({
+    required this.type,
+    required this.description,
+    required this.difficultyModifier,
+    required this.hypeModifier,
+  });
+}
+
+import '../models/fighter_model.dart';
+
+class DamageModel {
+  static double calculatePunchDamage({
+    required Fighter attacker,
+    required Fighter defender,
+    required double punchPower,
+  }) {
+    double baseDamage = punchPower * (attacker.power / 100);
+    double defenseFactor = defender.defense / 100;
+    double chinFactor = defender.chin / 100;
+
+    double damage =
+        baseDamage * (1 - defenseFactor) * (1 - (chinFactor * 0.5));
+
+    // Wear & tear increases damage over time
+    damage *= (1 + defender.wearAndTear * 0.01);
+
+    if (damage < 0) damage = 0;
+    return damage;
+  }
+
+  static bool checkKnockdown(Fighter defender, double damage) {
+    double kdThreshold =
+        (defender.chin + defender.health) * 0.4;
+
+    return damage > kdThreshold;
+  }
+
+  static bool checkKnockout(Fighter defender) {
+    return defender.health <= 0 || defender.wearAndTear >= 95;
+  }
+
+  static void applyWear(Fighter fighter, double amount) {
+    fighter.addWear(amount);
+  }
+}
+
+import '../models/fighter_model.dart';
+
+class JudgeScoring {
+  static Map<String, int> scoreRound({
+    required Fighter fighterA,
+    required Fighter fighterB,
+    required int landedA,
+    required int landedB,
+    required bool knockdownA,
+    required bool knockdownB,
+  }) {
+    int scoreA = 10;
+    int scoreB = 10;
+
+    if (landedA > landedB) scoreB--;
+    if (landedB > landedA) scoreA--;
+
+    if (knockdownA) scoreB -= 2;
+    if (knockdownB) scoreA -= 2;
+
+    scoreA = scoreA.clamp(7, 10);
+    scoreB = scoreB.clamp(7, 10);
+
+    // Readiness bias
+    scoreA = (scoreA * readinessBias(fighterA.readiness)).round();
+    scoreB = (scoreB * readinessBias(fighterB.readiness)).round();
+
+    return {
+      fighterA.id: scoreA,
+      fighterB.id: scoreB,
+    };
+  }
+
+  static double readinessBias(double readiness) {
+    if (readiness >= 90) return 1.05;
+    if (readiness <= 60) return 0.95;
+    return 1.0;
+  }
+}
+
+import '../models/fighter_model.dart';
+
+enum AIStrategyType {
+  aggressive,
+  balanced,
+  defensive,
+}
+
+class AIStrategy {
+  static AIStrategyType decideStrategy(Fighter fighter) {
+    if (fighter.health < 35 || fighter.stamina < 30) {
+      return AIStrategyType.defensive;
+    }
+
+    if (fighter.power > fighter.speed && fighter.stamina > 50) {
+      return AIStrategyType.aggressive;
+    }
+
+    return AIStrategyType.balanced;
+  }
+
+  static double aggressionMultiplier(AIStrategyType type) {
+    switch (type) {
+      case AIStrategyType.aggressive:
+        return 1.2;
+      case AIStrategyType.defensive:
+        return 0.8;
+      case AIStrategyType.balanced:
+      default:
+        return 1.0;
+    }
+  }
+
+  static double staminaUsageMultiplier(AIStrategyType type) {
+    switch (type) {
+      case AIStrategyType.aggressive:
+        return 1.25;
+      case AIStrategyType.defensive:
+        return 0.75;
+      case AIStrategyType.balanced:
+      default:
+        return 1.0;
+    }
+  }
+}
+import '../models/fighter_model.dart';
+import '../models/fight_preparation_summary.dart';
+
+class FightPreparationEngine {
+  static FightPreparationSummary build(Fighter fighter) {
+    double staminaBonus = ((fighter.stamina - 50) / 100).clamp(-0.1, 0.2);
+    double powerBonus = ((fighter.power - 50) / 120).clamp(-0.08, 0.15);
+
+    double readiness = fighter.readiness.clamp(0, 100);
+    bool injuryConcern = fighter.injuryWeeks > 0;
+
+    String grade;
+    if (readiness >= 90) {
+      grade = "A+";
+    } else if (readiness >= 80) {
+      grade = "A";
+    } else if (readiness >= 70) {
+      grade = "B";
+    } else if (readiness >= 60) {
+      grade = "C";
+    } else {
+      grade = "D";
+    }
+
+    return FightPreparationSummary(
+      readiness: readiness,
+      staminaBonus: staminaBonus,
+      powerBonus: powerBonus,
+      injuryConcern: injuryConcern,
+      campGrade: grade,
+    );
+  }
+}
+
+import '../models/fighter_model.dart';
+import '../models/rival_reaction.dart';
+
+class RivalAIEngine {
+  static RivalReaction react(Fighter player, Fighter rival) {
+    double readinessDiff = player.readiness - rival.readiness;
+
+    if (readinessDiff >= 15) {
+      return RivalReaction(
+        type: RivalReactionType.counterTrain,
+        description:
+            "The rival camp intensifies training after seeing your strong preparation.",
+        difficultyModifier: 1.10,
+        hypeModifier: 1.15,
+      );
+    }
+
+    if (readinessDiff <= -10) {
+      return RivalReaction(
+        type: RivalReactionType.trashTalk,
+        description:
+            "The rival senses weakness and ramps up trash talk and pressure.",
+        difficultyModifier: 1.05,
+        hypeModifier: 1.20,
+      );
+    }
+
+    if (player.popularity > rival.popularity + 10) {
+      return RivalReaction(
+        type: RivalReactionType.respect,
+        description:
+            "The rival publicly acknowledges your momentum and preparation.",
+        difficultyModifier: 1.02,
+        hypeModifier: 1.05,
+      );
+    }
+
+    return RivalReaction(
+      type: RivalReactionType.ignore,
+      description: "The rival camp stays focused and unchanged.",
+      difficultyModifier: 1.0,
+      hypeModifier: 1.0,
+    );
+  }
+}
+
+import '../models/fighter_model.dart';
+import '../models/venue_model.dart';
+
+class DynamicPPVEngine {
+  static int estimateBuys({
+    required Fighter fighterA,
+    required Fighter fighterB,
+    required Venue venue,
+    required double hype,
+  }) {
+    double starPower =
+        (fighterA.popularity + fighterB.popularity) / 2;
+
+    double baseBuys = starPower * 10000;
+    baseBuys *= venue.prestigeBoost;
+    baseBuys *= (1 + hype);
+
+    return baseBuys.round();
+  }
+
+  static double estimateRevenue({
+    required int buys,
+    double ppvPrice = 79.99,
+  }) {
+    return buys * ppvPrice;
+  }
+}
+
+import 'dart:math';
+
+import '../models/fighter_model.dart';
+import '../models/belt_model.dart';
+import '../engine/damage_model.dart';
+import '../engine/judge_scoring.dart';
+import '../engine/ai_strategy.dart';
+import '../engine/fight_preparation_engine.dart';
+import '../engine/rival_ai_engine.dart';
+
+class FightResult {
+  final Fighter winner;
+  final Fighter loser;
+  final bool knockout;
+  final int rounds;
+  final Map<String, int> finalScores;
+
+  FightResult({
+    required this.winner,
+    required this.loser,
+    required this.knockout,
+    required this.rounds,
+    required this.finalScores,
+  });
+}
+
+class FightEngineWithBelts {
+  static FightResult simulate({
+    required Fighter fighterA,
+    required Fighter fighterB,
+    Belt? belt,
+    int maxRounds = 12,
+  }) {
+    final rand = Random();
+
+    // Camp bonuses
+    final prepA = FightPreparationEngine.build(fighterA);
+    final prepB = FightPreparationEngine.build(fighterB);
+
+    fighterA.stamina *= (1 + prepA.staminaBonus);
+    fighterA.power *= (1 + prepA.powerBonus);
+
+    fighterB.stamina *= (1 + prepB.staminaBonus);
+    fighterB.power *= (1 + prepB.powerBonus);
+
+    // Rival reaction
+    final reaction = RivalAIEngine.react(fighterA, fighterB);
+    fighterB.stamina *= reaction.difficultyModifier;
+    fighterB.power *= reaction.difficultyModifier;
+
+    Map<String, int> totalScores = {
+      fighterA.id: 0,
+      fighterB.id: 0,
+    };
+
+    for (int round = 1; round <= maxRounds; round++) {
+      if (fighterA.health <= 0 || fighterB.health <= 0) break;
+
+      final stratA = AIStrategy.decideStrategy(fighterA);
+      final stratB = AIStrategy.decideStrategy(fighterB);
+
+      int punchesA =
+          (rand.nextInt(20) + 20) * AIStrategy.aggressionMultiplier(stratA).round();
+      int punchesB =
+          (rand.nextInt(20) + 20) * AIStrategy.aggressionMultiplier(stratB).round();
+
+      int landedA = rand.nextInt(punchesA);
+      int landedB = rand.nextInt(punchesB);
+
+      double damageA = DamageModel.calculatePunchDamage(
+        attacker: fighterA,
+        defender: fighterB,
+        punchPower: landedA.toDouble(),
+      );
+
+      double damageB = DamageModel.calculatePunchDamage(
+        attacker: fighterB,
+        defender: fighterA,
+        punchPower: landedB.toDouble(),
+      );
+
+      fighterB.applyDamage(damageA);
+      fighterA.applyDamage(damageB);
+
+      DamageModel.applyWear(fighterA, landedB * 0.1);
+      DamageModel.applyWear(fighterB, landedA * 0.1);
+
+      bool kdA = DamageModel.checkKnockdown(fighterB, damageA);
+      bool kdB = DamageModel.checkKnockdown(fighterA, damageB);
+
+      if (DamageModel.checkKnockout(fighterA)) {
+        _finalizeKO(fighterB, fighterA, belt);
+        return FightResult(
+          winner: fighterB,
+          loser: fighterA,
+          knockout: true,
+          rounds: round,
+          finalScores: totalScores,
+        );
+      }
+
+      if (DamageModel.checkKnockout(fighterB)) {
+        _finalizeKO(fighterA, fighterB, belt);
+        return FightResult(
+          winner: fighterA,
+          loser: fighterB,
+          knockout: true,
+          rounds: round,
+          finalScores: totalScores,
+        );
+      }
+
+      final roundScores = JudgeScoring.scoreRound(
+        fighterA: fighterA,
+        fighterB: fighterB,
+        landedA: landedA,
+        landedB: landedB,
+        knockdownA: kdA,
+        knockdownB: kdB,
+      );
+
+      totalScores[fighterA.id] =
+          totalScores[fighterA.id]! + roundScores[fighterA.id]!;
+      totalScores[fighterB.id] =
+          totalScores[fighterB.id]! + roundScores[fighterB.id]!;
+    }
+
+    Fighter winner =
+        totalScores[fighterA.id]! >= totalScores[fighterB.id]!
+            ? fighterA
+            : fighterB;
+    Fighter loser = winner == fighterA ? fighterB : fighterA;
+
+    belt?.awardTo(winner.id);
+
+    return FightResult(
+      winner: winner,
+      loser: loser,
+      knockout: false,
+      rounds: maxRounds,
+      finalScores: totalScores,
+    );
+  }
+
+  static void _finalizeKO(Fighter winner, Fighter loser, Belt? belt) {
+    winner.wins++;
+    loser.losses++;
+    belt?.awardTo(winner.id);
+  }
+}
+
+import 'package:sqflite/sqflite.dart';
+import 'package:path/path.dart';
+
+class DBProvider {
+  static Database? _database;
+
+  static Future<void> initDB() async {
+    if (_database != null) return;
+
+    final path = join(await getDatabasesPath(), 'canvas_kings.db');
+
+    _database = await openDatabase(
+      path,
+      version: 1,
+      onCreate: (db, version) async {
+        await db.execute('''
+          CREATE TABLE fighters (
+            id TEXT PRIMARY KEY,
+            firstName TEXT,
+            lastName TEXT,
+            age INTEGER,
+            weightClass TEXT,
+            wins INTEGER,
+            losses INTEGER,
+            draws INTEGER,
+            popularity INTEGER
+          )
+        ''');
+      },
+    );
+  }
+
+  static Database get db {
+    if (_database == null) {
+      throw Exception("Database not initialized");
+    }
+    return _database!;
+  }
+}
+
+import 'package:sqflite/sqflite.dart';
+import '../models/fighter_model.dart';
+import 'db_provider.dart';
+
+class SaveSystem {
+  static Future<void> saveFighter(Fighter fighter) async {
+    final db = DBProvider.db;
+
+    await db.insert(
+      'fighters',
+      fighter.toMap(),
+      conflictAlgorithm: ConflictAlgorithm.replace,
+    );
+  }
+
+  static Future<Fighter?> loadFighter(String fighterId) async {
+    final db = DBProvider.db;
+
+    final result = await db.query(
+      'fighters',
+      where: 'id = ?',
+      whereArgs: [fighterId],
+      limit: 1,
+    );
+
+    if (result.isEmpty) return null;
+
+    return Fighter.fromMap(result.first);
+  }
+
+  static Future<void> deleteFighter(String fighterId) async {
+    final db = DBProvider.db;
+
+    await db.delete(
+      'fighters',
+      where: 'id = ?',
+      whereArgs: [fighterId],
+    );
+  }
+}
+
+import '../models/fighter_model.dart';
+import '../models/venue_model.dart';
+import '../models/belt_model.dart';
+
+class PurseBreakdown {
+  final int grossPurse;
+  final int sanctionFee;
+  final int managerFee;
+  final int netPayout;
+
+  PurseBreakdown({
+    required this.grossPurse,
+    required this.sanctionFee,
+    required this.managerFee,
+    required this.netPayout,
+  });
+}
+
+class PurseService {
+  /// Main purse calculator
+  static PurseBreakdown calculatePurse({
+    required Fighter fighter,
+    required Venue venue,
+    Belt? belt,
+    required int ppvBuys,
+  }) {
+    final base = venue.basePurse;
+    final popularityMultiplier = fighter.popularity / 100.0;
+
+    final ppvBonus = (ppvBuys * venue.ppvCut * popularityMultiplier).round();
+    final gross = base + ppvBonus;
+
+    final sanctionFee = belt != null ? (gross * belt.sanctionPercent).round() : 0;
+    final managerFee = (gross * 0.10).round(); // 10% management cut
+
+    final net = gross - sanctionFee - managerFee;
+
+    return PurseBreakdown(
+      grossPurse: gross,
+      sanctionFee: sanctionFee,
+      managerFee: managerFee,
+      netPayout: net,
+    );
+  }
+
+  /// Apply payout directly to fighter
+  static void applyPayout(Fighter fighter, PurseBreakdown breakdown) {
+    fighter.money += breakdown.netPayout;
+  }
+}
+
+import 'package:flutter/material.dart';
+import '../services/purse_service.dart';
+
+class FeeConfirmationDialog extends StatelessWidget {
+  final PurseBreakdown breakdown;
+  final VoidCallback onConfirm;
+
+  const FeeConfirmationDialog({
+    super.key,
+    required this.breakdown,
+    required this.onConfirm,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return AlertDialog(
+      title: const Text('Purse Breakdown'),
+      content: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          _row('Gross Purse', breakdown.grossPurse),
+          _row('Sanctioning Fee', -breakdown.sanctionFee),
+          _row('Manager Fee', -breakdown.managerFee),
+          const Divider(),
+          _row('Net Payout', breakdown.netPayout, highlight: true),
+        ],
+      ),
+      actions: [
+        TextButton(
+          child: const Text('Cancel'),
+          onPressed: () => Navigator.pop(context),
+        ),
+        ElevatedButton(
+          child: const Text('Confirm Fight'),
+          onPressed: () {
+            Navigator.pop(context);
+            onConfirm();
+          },
+        ),
+      ],
+    );
+  }
+
+  Widget _row(String label, int amount, {bool highlight = false}) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 4),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Text(label),
+          Text(
+            '\$${amount.abs()}',
+            style: TextStyle(
+              color: amount < 0 ? Colors.redAccent : Colors.greenAccent,
+              fontWeight: highlight ? FontWeight.bold : FontWeight.normal,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+import 'package:flutter/material.dart';
+import '../services/purse_service.dart';
+
+class FeeConfirmationDialog extends StatelessWidget {
+  final PurseBreakdown breakdown;
+  final VoidCallback onConfirm;
+
+  const FeeConfirmationDialog({
+    super.key,
+    required this.breakdown,
+    required this.onConfirm,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return AlertDialog(
+      title: const Text('Purse Breakdown'),
+      content: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          _row('Gross Purse', breakdown.grossPurse),
+          _row('Sanctioning Fee', -breakdown.sanctionFee),
+          _row('Manager Fee', -breakdown.managerFee),
+          const Divider(),
+          _row('Net Payout', breakdown.netPayout, highlight: true),
+        ],
+      ),
+      actions: [
+        TextButton(
+          child: const Text('Cancel'),
+          onPressed: () => Navigator.pop(context),
+        ),
+        ElevatedButton(
+          child: const Text('Confirm Fight'),
+          onPressed: () {
+            Navigator.pop(context);
+            onConfirm();
+          },
+        ),
+      ],
+    );
+  }
+
+  Widget _row(String label, int amount, {bool highlight = false}) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 4),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Text(label),
+          Text(
+            '\$${amount.abs()}',
+            style: TextStyle(
+              color: amount < 0 ? Colors.redAccent : Colors.greenAccent,
+              fontWeight: highlight ? FontWeight.bold : FontWeight.normal,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+import 'package:flutter/material.dart';
+import '../models/fighter_model.dart';
+import '../models/belt_model.dart';
+import '../models/venue_model.dart';
+
+class FightCard extends StatelessWidget {
+  final Fighter redCorner;
+  final Fighter blueCorner;
+  final String weightClass;
+  final Venue venue;
+  final List<Belt> belts;
+  final bool isMainEvent;
+
+  const FightCard({
+    super.key,
+    required this.redCorner,
+    required this.blueCorner,
+    required this.weightClass,
+    required this.venue,
+    this.belts = const [],
+    this.isMainEvent = false,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Card(
+      elevation: isMainEvent ? 8 : 3,
+      margin: const EdgeInsets.all(12),
+      child: Padding(
+        padding: const EdgeInsets.all(16),
+        child: Column(
+          children: [
+            if (isMainEvent)
+              const Text(
+                'MAIN EVENT',
+                style: TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.orangeAccent,
+                ),
+              ),
+
+            const SizedBox(height: 8),
+
+            Text(
+              weightClass.toUpperCase(),
+              style: const TextStyle(
+                fontSize: 14,
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+
+            const SizedBox(height: 12),
+
+            _fighterRow(),
+
+            if (belts.isNotEmpty) ...[
+              const Divider(),
+              _beltRow(),
+            ],
+
+            const SizedBox(height: 8),
+
+            Text(
+              venue.name,
+              style: const TextStyle(color: Colors.grey),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _fighterRow() {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        _fighter(redCorner, Colors.redAccent),
+        const Text(
+          'VS',
+          style: TextStyle(fontWeight: FontWeight.bold),
+        ),
+        _fighter(blueCorner, Colors.blueAccent),
+      ],
+    );
+  }
+
+  Widget _fighter(Fighter fighter, Color color) {
+    return Column(
+      children: [
+        Text(
+          fighter.name,
+          style: TextStyle(
+            fontSize: 16,
+            fontWeight: FontWeight.bold,
+            color: color,
+          ),
+        ),
+        Text(
+          '${fighter.record.wins}-${fighter.record.losses}-${fighter.record.draws}',
+          style: const TextStyle(fontSize: 12),
+        ),
+      ],
+    );
+  }
+
+  Widget _beltRow() {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: belts.map((belt) {
+        return Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 6),
+          child: Column(
+            children: [
+              Image.asset(
+                belt.iconPath,
+                height: 36,
+                width: 36,
+              ),
+              const SizedBox(height: 4),
+              Text(
+                belt.shortName,
+                style: const TextStyle(fontSize: 10),
+              ),
+            ],
+          ),
+        );
+      }).toList(),
+    );
+  }
+}
+
+import 'package:flutter/material.dart';
+import '../models/fighter_model.dart';
+import '../models/belt_model.dart';
+import '../commentary/commentary_manager.dart';
+
+class BeltCeremony extends StatelessWidget {
+  final Fighter winner;
+  final List<Belt> belts;
+
+  const BeltCeremony({
+    super.key,
+    required this.winner,
+    required this.belts,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    if (belts.isEmpty) return const SizedBox.shrink();
+
+    // Trigger commentary cue
+    CommentaryManager.instance.playCue('belt_win');
+
+    return Center(
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          const Text(
+            'NEW CHAMPION',
+            style: TextStyle(
+              fontSize: 22,
+              fontWeight: FontWeight.bold,
+              color: Colors.amber,
+            ),
+          ),
+          const SizedBox(height: 12),
+
+          Text(
+            winner.name,
+            style: const TextStyle(
+              fontSize: 18,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+
+          const SizedBox(height: 16),
+
+          Wrap(
+            spacing: 12,
+            children: belts.map((belt) {
+              return Column(
+                children: [
+                  Image.asset(
+                    belt.iconPath,
+                    height: 64,
+                    width: 64,
+                  ),
+                  const SizedBox(height: 6),
+                  Text(
+                    belt.fullName,
+                    style: const TextStyle(fontSize: 12),
+                    textAlign: TextAlign.center,
+                  ),
+                ],
+              );
+            }).toList(),
+          ),
+
+          const SizedBox(height: 20),
+
+          ElevatedButton(
+            onPressed: () => Navigator.pop(context),
+            child: const Text('Continue'),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+import 'dart:math';
+import 'package:audioplayers/audioplayers.dart';
+import 'commentary_personalities.dart';
+
+class CommentaryManager {
+  CommentaryManager._internal();
+  static final CommentaryManager instance = CommentaryManager._internal();
+
+  final AudioPlayer _player = AudioPlayer();
+  final Random _rng = Random();
+
+  CommentaryPersonality activePersonality =
+      CommentaryPersonalities.technical;
+
+  void setPersonality(CommentaryPersonality personality) {
+    activePersonality = personality;
+  }
+
+  Future<void> playCue(String cue) async {
+    final options = activePersonality.cues[cue];
+    if (options == null || options.isEmpty) return;
+
+    final selected = options[_rng.nextInt(options.length)];
+    await _player.play(AssetSource(selected));
+  }
+
+  void onRoundStart(int round) {
+    playCue('round_start');
+  }
+
+  void onBigHit() {
+    playCue('big_hit');
+  }
+
+  void onKnockdown() {
+    playCue('knockdown');
+  }
+
+  void onKnockout() {
+    playCue('knockout');
+  }
+
+  void onBeltWin() {
+    playCue('belt_win');
+  }
+}
+
+class CommentaryPersonality {
+  final String name;
+  final Map<String, List<String>> cues;
+
+  const CommentaryPersonality({
+    required this.name,
+    required this.cues,
+  });
+}
+
+class CommentaryPersonalities {
+  static const aggressive = CommentaryPersonality(
+    name: 'Aggressive',
+    cues: {
+      'round_start': [
+        'audio/commentary/aggressive/round_start1.mp3',
+      ],
+      'big_hit': [
+        'audio/commentary/aggressive/big_hit1.mp3',
+        'audio/commentary/aggressive/big_hit2.mp3',
+      ],
+      'knockdown': [
+        'audio/commentary/aggressive/knockdown1.mp3',
+      ],
+      'knockout': [
+        'audio/commentary/aggressive/knockout1.mp3',
+      ],
+      'belt_win': [
+        'audio/commentary/aggressive/belt_win1.mp3',
+      ],
+    },
+  );
+
+  static const technical = CommentaryPersonality(
+    name: 'Technical',
+    cues: {
+      'round_start': [
+        'audio/commentary/technical/round_start1.mp3',
+      ],
+      'big_hit': [
+        'audio/commentary/technical/big_hit1.mp3',
+      ],
+      'knockdown': [
+        'audio/commentary/technical/knockdown1.mp3',
+      ],
+      'knockout': [
+        'audio/commentary/technical/knockout1.mp3',
+      ],
+      'belt_win': [
+        'audio/commentary/technical/belt_win1.mp3',
+      ],
+    },
+  );
+
+  static const friendly = CommentaryPersonality(
+    name: 'Friendly',
+    cues: {
+      'round_start': [
+        'audio/commentary/friendly/round_start1.mp3',
+      ],
+      'big_hit': [
+        'audio/commentary/friendly/big_hit1.mp3',
+      ],
+      'knockdown': [
+        'audio/commentary/friendly/knockdown1.mp3',
+      ],
+      'knockout': [
+        'audio/commentary/friendly/knockout1.mp3',
+      ],
+      'belt_win': [
+        'audio/commentary/friendly/belt_win1.mp3',
+      ],
+    },
+  );
+}
+
+import 'dart:math';
+import '../models/fighter_model.dart';
+import '../models/belt_model.dart';
+import '../commentary/commentary_manager.dart';
+import 'judge_scoring.dart';
+import 'damage_model.dart';
+
+enum FightOutcomeType { decision, knockout, technicalKnockout }
+
+class FightResult {
+  final Fighter winner;
+  final Fighter loser;
+  final FightOutcomeType outcome;
+  final int roundEnded;
+  final List<Belt> beltsAwarded;
+
+  FightResult({
+    required this.winner,
+    required this.loser,
+    required this.outcome,
+    required this.roundEnded,
+    this.beltsAwarded = const [],
+  });
+}
+
+class FightEngineWithBelts {
+  final Fighter red;
+  final Fighter blue;
+  final List<Belt> beltsOnTheLine;
+  final int rounds;
+  final Random _rng = Random();
+
+  int currentRound = 1;
+  bool fightOver = false;
+
+  late Fighter _winner;
+  late Fighter _loser;
+  late FightOutcomeType _outcome;
+
+  final DamageModel _damageModel = DamageModel();
+  final JudgeScoring _judges = JudgeScoring();
+
+  FightEngineWithBelts({
+    required this.red,
+    required this.blue,
+    this.beltsOnTheLine = const [],
+    this.rounds = 12,
+  });
+
+  FightResult simulateFight() {
+    while (!fightOver && currentRound <= rounds) {
+      _simulateRound();
+      currentRound++;
+    }
+
+    if (!fightOver) {
+      _resolveDecision();
+    }
+
+    return FightResult(
+      winner: _winner,
+      loser: _loser,
+      outcome: _outcome,
+      roundEnded: currentRound - 1,
+      beltsAwarded: beltsOnTheLine,
+    );
+  }
+
+  void _simulateRound() {
+    CommentaryManager.instance.onRoundStart(currentRound);
+
+    final redScore = _exchange(red, blue);
+    final blueScore = _exchange(blue, red);
+
+    _judges.scoreRound(
+      round: currentRound,
+      redScore: redScore,
+      blueScore: blueScore,
+    );
+
+    if (_checkKnockout(red, blue)) return;
+    if (_checkKnockout(blue, red)) return;
+  }
+
+  int _exchange(Fighter attacker, Fighter defender) {
+    int score = 0;
+
+    for (int i = 0; i < 10; i++) {
+      final hitChance =
+          attacker.stats.accuracy - defender.stats.defense + _rng.nextInt(20);
+
+      if (hitChance > 10) {
+        score += 1;
+        _damageModel.applyDamage(attacker, defender);
+
+        CommentaryManager.instance.onBigHit();
+
+        if (_rng.nextDouble() < 0.05) {
+          CommentaryManager.instance.onKnockdown();
+          defender.state.knockdownsThisRound++;
+        }
+      }
+    }
+
+    return score;
+  }
+
+  bool _checkKnockout(Fighter attacker, Fighter defender) {
+    if (defender.state.health <= 0 ||
+        defender.state.knockdownsThisRound >= 3) {
+      fightOver = true;
+      _winner = attacker;
+      _loser = defender;
+
+      _outcome = defender.state.health <= 0
+          ? FightOutcomeType.knockout
+          : FightOutcomeType.technicalKnockout;
+
+      CommentaryManager.instance.onKnockout();
+      return true;
+    }
+    return false;
+  }
+
+  void _resolveDecision() {
+    final winnerIsRed = _judges.getWinner() == Corner.red;
+    _winner = winnerIsRed ? red : blue;
+    _loser = winnerIsRed ? blue : red;
+    _outcome = FightOutcomeType.decision;
+  }
+}
+
+enum Corner { red, blue }
+
+class JudgeScorecard {
+  int redTotal = 0;
+  int blueTotal = 0;
+
+  void scoreRound(int redScore, int blueScore) {
+    if (redScore > blueScore) {
+      redTotal += 10;
+      blueTotal += 9;
+    } else if (blueScore > redScore) {
+      blueTotal += 10;
+      redTotal += 9;
+    } else {
+      redTotal += 10;
+      blueTotal += 10;
+    }
+  }
+}
+
+class JudgeScoring {
+  final List<JudgeScorecard> _judges = [
+    JudgeScorecard(),
+    JudgeScorecard(),
+    JudgeScorecard(),
+  ];
+
+  void scoreRound({
+    required int round,
+    required int redScore,
+    required int blueScore,
+  }) {
+    for (final judge in _judges) {
+      judge.scoreRound(redScore, blueScore);
+    }
+  }
+
+  Corner getWinner() {
+    int redWins = 0;
+    int blueWins = 0;
+
+    for (final judge in _judges) {
+      if (judge.redTotal > judge.blueTotal) {
+        redWins++;
+      } else if (judge.blueTotal > judge.redTotal) {
+        blueWins++;
+      }
+    }
+
+    if (redWins > blueWins) return Corner.red;
+    if (blueWins > redWins) return Corner.blue;
+
+    // Default tie-breaker (rare)
+    return Corner.red;
+  }
+
+  List<Map<String, int>> exportScorecards() {
+    return _judges
+        .map((j) => {
+              'red': j.redTotal,
+              'blue': j.blueTotal,
+            })
+        .toList();
+  }
+}
+
+import '../models/fighter_model.dart';
+
+class DamageModel {
+  void applyDamage(Fighter attacker, Fighter defender) {
+    final int damage =
+        (attacker.stats.power * 0.5).round() + attacker.state.fatigue;
+
+    defender.state.health -= damage;
+    defender.state.fatigue += 1;
+
+    if (defender.state.health < 0) {
+      defender.state.health = 0;
+    }
+
+    // Long-term wear & tear
+    defender.careerStats.totalDamageTaken += damage;
+
+    if (damage > 15) {
+      defender.careerStats.severeHitsTaken++;
+    }
+  }
+
+  void applyRecovery(Fighter fighter) {
+    fighter.state.health += 10;
+    fighter.state.fatigue -= 2;
+
+    if (fighter.state.fatigue < 0) {
+      fighter.state.fatigue = 0;
+    }
+
+    if (fighter.state.health > fighter.stats.maxHealth) {
+      fighter.state.health = fighter.stats.maxHealth;
+    }
+  }
+}
+
+import '../models/fighter_model.dart';
+import '../models/venue_model.dart';
+
+class PPVResult {
+  final int buys;
+  final int grossRevenue;
+
+  PPVResult({
+    required this.buys,
+    required this.grossRevenue,
+  });
+}
+
+class DynamicPPVEngine {
+  static const int pricePerBuy = 70;
+
+  PPVResult generate({
+    required Fighter red,
+    required Fighter blue,
+    required Venue venue,
+    required bool isTitleFight,
+  }) {
+    final int baseBuys =
+        ((red.popularity + blue.popularity) * 1000).round();
+
+    final venueFactor = venue.capacity / 20000;
+    final titleBoost = isTitleFight ? 1.3 : 1.0;
+
+    final buys = (baseBuys * venueFactor * titleBoost).round();
+    final revenue = buys * pricePerBuy;
+
+    return PPVResult(
+      buys: buys,
+      grossRevenue: revenue,
+    );
+  }
+}
+
+import '../models/fighter_model.dart';
+
+class PurseBreakdown {
+  final int grossPurse;
+  final int sanctionFee;
+  final int managerFee;
+  final int netPayout;
+
+  PurseBreakdown({
+    required this.grossPurse,
+    required this.sanctionFee,
+    required this.managerFee,
+    required this.netPayout,
+  });
+}
+
+class PurseService {
+  static const double sanctionRate = 0.03;
+  static const double managerRate = 0.1;
+
+  static PurseBreakdown calculate({
+    required Fighter fighter,
+    required int totalRevenue,
+    required bool isChampion,
+  }) {
+    final double share = isChampion ? 0.6 : 0.4;
+    final int gross = (totalRevenue * share).round();
+
+    final int sanction = (gross * sanctionRate).round();
+    final int manager = (gross * managerRate).round();
+    final int net = gross - sanction - manager;
+
+    fighter.careerStats.totalEarnings += net;
+
+    return PurseBreakdown(
+      grossPurse: gross,
+      sanctionFee: sanction,
+      managerFee: manager,
+      netPayout: net,
+    );
+  }
+}
+
+import '../models/fighter_model.dart';
+import '../models/belt_model.dart';
+import '../engine/fight_engine_with_belts.dart';
+
+class CareerResultService {
+  static void applyFightResult(FightResult result) {
+    final winner = result.winner;
+    final loser = result.loser;
+
+    // Update records
+    winner.record.wins++;
+    loser.record.losses++;
+
+    if (result.outcome == FightOutcomeType.knockout ||
+        result.outcome == FightOutcomeType.technicalKnockout) {
+      winner.careerStats.knockouts++;
+    }
+
+    // Belts
+    for (final belt in result.beltsAwarded) {
+      belt.currentHolderId = winner.id;
+      winner.belts.add(belt);
+      loser.belts.removeWhere((b) => b.id == belt.id);
+    }
+
+    // Legacy score
+    winner.careerStats.legacyScore +=
+        result.outcome == FightOutcomeType.decision ? 800 : 1200;
+
+    // Wear & tear impact
+    loser.careerStats.careerDamage += 10;
+  }
+}
+
+import 'belt_model.dart';
+
+class Fighter {
+  final String id;
+  final String name;
+  final String weightClass;
+  final FighterStats stats;
+  final FighterState state;
+  final FighterRecord record;
+  final CareerStats careerStats;
+
+  int popularity;
+  bool retired;
+  List<Belt> belts = [];
+
+  Fighter({
+    required this.id,
+    required this.name,
+    required this.weightClass,
+    required this.stats,
+    required this.state,
+    required this.record,
+    required this.careerStats,
+    this.popularity = 50,
+    this.retired = false,
+  });
+}
+
+class FighterStats {
+  final int power;
+  final int speed;
+  final int accuracy;
+  final int defense;
+  final int stamina;
+  final int maxHealth;
+
+  FighterStats({
+    required this.power,
+    required this.speed,
+    required this.accuracy,
+    required this.defense,
+    required this.stamina,
+    required this.maxHealth,
+  });
+}
+
+class FighterState {
+  int health;
+  int fatigue;
+  int knockdownsThisRound;
+
+  FighterState({
+    required this.health,
+    this.fatigue = 0,
+    this.knockdownsThisRound = 0,
+  });
+
+  void resetRound() {
+    knockdownsThisRound = 0;
+  }
+}
+
+class FighterRecord {
+  int wins;
+  int losses;
+  int draws;
+
+  FighterRecord({
+    this.wins = 0,
+    this.losses = 0,
+    this.draws = 0,
+  });
+}
+
+class CareerStats {
+  int totalEarnings;
+  int knockouts;
+  int legacyScore;
+  int careerDamage;
+  int totalDamageTaken;
+  int severeHitsTaken;
+
+  CareerStats({
+    this.totalEarnings = 0,
+    this.knockouts = 0,
+    this.legacyScore = 0,
+    this.careerDamage = 0,
+    this.totalDamageTaken = 0,
+    this.severeHitsTaken = 0,
+  });
+}
+
+class Belt {
+  final String id;
+  final String fullName;
+  final String shortName;
+  final String weightClass;
+  final bool isLineal;
+  final int prestige;
+  final String iconPath;
+
+  String? currentHolderId;
+  final List<BeltHistoryEntry> history = [];
+
+  Belt({
+    required this.id,
+    required this.fullName,
+    required this.shortName,
+    required this.weightClass,
+    this.isLineal = false,
+    this.prestige = 100,
+    required this.iconPath,
+    this.currentHolderId,
+  });
+
+  void awardTo(String fighterId, int year) {
+    currentHolderId = fighterId;
+    history.add(
+      BeltHistoryEntry(
+        fighterId: fighterId,
+        year: year,
+      ),
+    );
+  }
+}
+
+class BeltHistoryEntry {
+  final String fighterId;
+  final int year;
+
+  BeltHistoryEntry({
+    required this.fighterId,
+    required this.year,
+  });
+}
+
+class Venue {
+  final String id;
+  final String name;
+  final int capacity;
+  final int prestige;
+  final String region;
+
+  Venue({
+    required this.id,
+    required this.name,
+    required this.capacity,
+    this.prestige = 50,
+    this.region = 'Global',
+  });
+
+  int calculateGateRevenue(int ticketPrice) {
+    return capacity * ticketPrice;
+  }
+}
+
+class Gym {
+  final String id;
+  final String name;
+
+  int level;
+  int trainerSlots;
+  int nutritionistSlots;
+  int talentBonus;
+
+  Gym({
+    required this.id,
+    required this.name,
+    this.level = 1,
+    this.trainerSlots = 1,
+    this.nutritionistSlots = 0,
+    this.talentBonus = 0,
+  });
+
+  void upgrade() {
+    level++;
+    trainerSlots++;
+    if (level % 2 == 0) {
+      nutritionistSlots++;
+    }
+    talentBonus += 5;
+  }
+}
+
+class Promotion {
+  final String id;
+  final String name;
+
+  int reputation;
+  int marketShare;
+  int rivalryLevel;
+
+  Promotion({
+    required this.id,
+    required this.name,
+    this.reputation = 50,
+    this.marketShare = 10,
+    this.rivalryLevel = 0,
+  });
+
+  void promoteEvent(bool successful) {
+    reputation += successful ? 3 : -2;
+    marketShare += successful ? 1 : 0;
+  }
+
+  void escalateRivalry() {
+    rivalryLevel += 1;
+  }
+}
+
+class Contract {
+  final String id;
+  final String partnerName;
+  final ContractType type;
+
+  final int durationEvents;
+  final int basePay;
+  final double revenueShare;
+
+  int eventsCompleted = 0;
+
+  Contract({
+    required this.id,
+    required this.partnerName,
+    required this.type,
+    required this.durationEvents,
+    required this.basePay,
+    this.revenueShare = 0.0,
+  });
+
+  bool get isActive => eventsCompleted < durationEvents;
+
+  int calculatePayout(int eventRevenue) {
+    final int share = (eventRevenue * revenueShare).round();
+    return basePay + share;
+  }
+
+  void advanceEvent() {
+    eventsCompleted++;
+  }
+}
+
+enum ContractType {
+  sponsorship,
+  streaming,
+  promotional,
+}
+
+import 'package:sqflite/sqflite.dart';
+import 'package:path/path.dart';
+
+class DBProvider {
+  static Database? _db;
+
+  static Future<void> initDB() async {
+    if (_db != null) return;
+
+    final dbPath = await getDatabasesPath();
+    final path = join(dbPath, 'canvas_kings.db');
+
+    _db = await openDatabase(
+      path,
+      version: 1,
+      onCreate: (Database db, int version) async {
+        await db.execute('''
+          CREATE TABLE fighters (
+            id TEXT PRIMARY KEY,
+            name TEXT,
+            weightClass TEXT,
+            popularity INTEGER
+          )
+        ''');
+
+        await db.execute('''
+          CREATE TABLE belts (
+            id TEXT PRIMARY KEY,
+            name TEXT,
+            weightClass TEXT,
+            holderId TEXT
+          )
+        ''');
+      },
+    );
+  }
+
+  static Database get db {
+    if (_db == null) {
+      throw Exception('Database not initialized');
+    }
+    return _db!;
+  }
+}
+
+import 'dart:convert';
+import 'package:sqflite/sqflite.dart';
+import '../models/fighter_model.dart';
+import 'db_provider.dart';
+
+class SaveSystem {
+  /// Save fighter basic data
+  static Future<void> saveFighter(Fighter fighter) async {
+    final Database db = DBProvider.db;
+
+    await db.insert(
+      'fighters',
+      {
+        'id': fighter.id,
+        'name': fighter.name,
+        'weightClass': fighter.weightClass,
+        'popularity': fighter.popularity,
+      },
+      conflictAlgorithm: ConflictAlgorithm.replace,
+    );
+  }
+
+  /// Load all fighters
+  static Future<List<Fighter>> loadFighters() async {
+    final Database db = DBProvider.db;
+    final List<Map<String, dynamic>> maps =
+        await db.query('fighters');
+
+    return maps.map((map) {
+      return Fighter(
+        id: map['id'],
+        name: map['name'],
+        weightClass: map['weightClass'],
+        popularity: map['popularity'],
+        stats: FighterStats(
+          power: 50,
+          speed: 50,
+          accuracy: 50,
+          defense: 50,
+          stamina: 50,
+          maxHealth: 100,
+        ),
+        state: FighterState(
+          health: 100,
+        ),
+        record: FighterRecord(),
+        careerStats: CareerStats(),
+      );
+    }).toList();
+  }
+
+  /// Generic JSON backup (optional)
+  static String exportCareerJson(List<Fighter> fighters) {
+    final data = fighters.map((f) {
+      return {
+        'id': f.id,
+        'name': f.name,
+        'weightClass': f.weightClass,
+        'popularity': f.popularity,
+        'record': {
+          'wins': f.record.wins,
+          'losses': f.record.losses,
+          'draws': f.record.draws,
+        },
+        'careerStats': {
+          'earnings': f.careerStats.totalEarnings,
+          'legacy': f.careerStats.legacyScore,
+        },
+      };
+    }).toList();
+
+    return jsonEncode(data);
+  }
+}
+
+import 'dart:math';
+import '../models/fighter_model.dart';
+
+class OpponentGenerator {
+  static final Random _rng = Random();
+
+  static Fighter generate({
+    required String weightClass,
+    int starRating = 3,
+    bool legacy = false,
+  }) {
+    final base = 40 + (starRating * 10);
+
+    return Fighter(
+      id: 'fighter_${_rng.nextInt(999999)}',
+      name: legacy ? _legacyName() : _randomName(),
+      weightClass: weightClass,
+      popularity: base + _rng.nextInt(20),
+      stats: FighterStats(
+        power: base + _rng.nextInt(10),
+        speed: base + _rng.nextInt(10),
+        accuracy: base + _rng.nextInt(10),
+        defense: base + _rng.nextInt(10),
+        stamina: base + _rng.nextInt(10),
+        maxHealth: 100,
+      ),
+      state: FighterState(health: 100),
+      record: FighterRecord(),
+      careerStats: CareerStats(),
+    );
+  }
+
+  static String _randomName() {
+    const first = ['Alex', 'Marcus', 'Luis', 'Devon', 'Jamal', 'Ivan'];
+    const last = ['Reyes', 'Cole', 'Thompson', 'Ortiz', 'Walker', 'King'];
+    return '${first[_rng.nextInt(first.length)]} ${last[_rng.nextInt(last.length)]}';
+  }
+
+  static String _legacyName() {
+    const surnames = ['Ali', 'Leonard', 'Hagler', 'Duran', 'Chavez'];
+    return 'Jr. ${surnames[_rng.nextInt(surnames.length)]}';
+  }
+}
+
+import 'package:flutter/material.dart';
+
+class HomeScreen extends StatelessWidget {
+  const HomeScreen({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Canvas Kings'),
+      ),
+      body: Padding(
+        padding: const EdgeInsets.all(16),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            _menuButton(
+              context,
+              title: 'Career Mode',
+              route: '/career',
+            ),
+            _menuButton(
+              context,
+              title: 'Quick Fight',
+              route: '/fight',
+           ),
+            _menuButton(
+              context,
+              title: 'Finance Dashboard',
+              route: '/finance',
+            ),
+            _menuButton(
+              context,
+              title: 'Promoter Tools',
+              route: '/promoter',
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _menuButton(
+    BuildContext context, {
+    required String title,
+    required String route,
+  }) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 8),
+      child: ElevatedButton(
+        onPressed: () => Navigator.pushNamed(context, route),
+        child: Padding(
+          padding: const EdgeInsets.all(16),
+          child: Text(title),
+        ),
+      ),
+    );
+  }
+}
+
+import 'package:flutter/material.dart';
+import '../engine/fight_engine_with_belts.dart';
+import '../models/fighter_model.dart';
+import '../models/belt_model.dart';
+import '../widgets/fight_card.dart';
+import '../widgets/belt_ceremony.dart';
+import '../commentary/commentary_manager.dart';
+
+class FightScreen extends StatefulWidget {
+  const FightScreen({super.key});
+
+  @override
+  State<FightScreen> createState() => _FightScreenState();
+}
+
+class _FightScreenState extends State<FightScreen> {
+  late FightEngineWithBelts _engine;
+  FightResult? _result;
+  bool _inProgress = false;
+
+  late Fighter red;
+  late Fighter blue;
+
+  final List<Belt> belts = [];
+
+  @override
+  void initState() {
+    super.initState();
+
+    red = _mockFighter('Red Corner');
+    blue = _mockFighter('Blue Corner');
+
+    _engine = FightEngineWithBelts(
+      red: red,
+      blue: blue,
+      beltsOnTheLine: belts,
+    );
+
+    CommentaryManager.instance.setPersonality(
+      CommentaryPersonalities.technical,
+    );
+  }
+
+  Fighter _mockFighter(String name) {
+    return Fighter(
+      id: name,
+      name: name,
+      weightClass: 'Middleweight',
+      popularity: 60,
+      stats: FighterStats(
+        power: 60,
+        speed: 60,
+        accuracy: 60,
+        defense: 60,
+        stamina: 60,
+        maxHealth: 100,
+      ),
+      state: FighterState(health: 100),
+      record: FighterRecord(),
+      careerStats: CareerStats(),
+    );
+  }
+
+  void _startFight() async {
+    setState(() {
+      _inProgress = true;
+    })
+
+    await Future.delayed(const Duration(seconds: 1));
+    final result = _engine.simulateFight();
+
+    setState(() {
+      _result = result;
+      _inProgress = false;
+    });
+
+    if (result.beltsAwarded.isNotEmpty) {
+      showDialog(
+        context: context,
+        builder: (_) => Dialog(
+          child: BeltCeremony(
+            winner: result.winner,
+            belts: result.beltsAwarded,
+          ),
+        ),
+      );
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Fight Night'),
+      ),
+      body: Padding(
+        padding: const EdgeInsets.all(16),
+        child: Column(
+          children: [
+            FightCard(
+              redCorner: red,
+              blueCorner: blue,
+              weightClass: red.weightClass,
+              venue: const Venue(
+                id: 'arena',
+                name: 'Grand Arena',
+                capacity: 20000,
+              ),
+              belts: belts,
+              isMainEvent: true,
+            ),
+            const SizedBox(height: 16),
+
+            if (_inProgress)
+              const CircularProgressIndicator()
+            else if (_result == null)
+              ElevatedButton(
+                onPressed: _startFight,
+                child: const Text('Start Fight'),
+              )
+            else
+              Text
+                '${_result!.winner.name} wins by ${_result!.outcome.name.toUpperCase()}',
+                style: const TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+import 'package:flutter/material.dart';
+import '../models/fighter_model.dart';
+import '../models/belt_model.dart';
+import '../widgets/popularity_card.dart';
+
+class CareerSummaryScreen extends StatelessWidget {
+  final Fighter fighter;
+  final List<Belt> belts;
+
+ const CareerSummaryScreen({
+    super.key,
+    required this.fighter,
+    required this.belts,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final record = fighter.record;
+    final career = fighter.careerStats;
+
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Career Summary'),
+      ),
+      body: SingleChildScrollView(
+        padding: const EdgeInsets.all(16),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            _header(),
+            const SizedBox(height: 12),
+
+            _recordCard(record),
+            const SizedBox(height: 12),
+
+            PopularityCard(
+              popularity: fighter.popularity,
+            ),
+            const SizedBox(height: 12),
+
+            _careerStats(career),
+            const SizedBox(height: 12),
+
+            _beltSection(),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _header() {
+    return Row(
+      children: [
+        CircleAvatar(
+          radius: 32,
+          child: Text(
+            fighter.name[0],
+            style: const TextStyle(fontSize: 28),
+          ),
+        ),
+        const SizedBox(width: 16),
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              fighter.name,
+              style: const TextStyle(
+                fontSize: 22,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            Text(
+              fighter.weightClass,
+              style: const TextStyle(color: Colors.grey),
+            ),
+          ],
+        ),
+      ],
+    );
+  }
+
+  Widget _recordCard(FighterRecord record) {
+    return Card(
+      child: ListTile(
+        title: const Text('Professional Record'),
+        subtitle: Text(
+          '${record.wins}-${record.losses}-${record.draws}',
+        ),
+        trailing: Text(
+          '${record.koWins} KO',
+          style: const TextStyle(fontWeight: FontWeight.bold),
+        ),
+      ),
+    );
+  }
+
+  Widget _careerStats(CareerStats stats) {
+    return Card(
+      child: Column(
+        children: [
+          const ListTile(title: Text('Career Highlights')),
+          _stat('Title Fights', stats.titleFights),
+          _stat('Title Wins', stats.titleWins),
+          _stat('Main Events', stats.mainEvents),
+          _stat('PPV Headliners', stats.ppvEvents),
+          _stat('Total Earnings', '\$${stats.totalEarnings.toStringAsFixed(0)}'),
+        ],
+      ),
+    );
+  }
+
+  Widget _stat(String label, dynamic value) {
+    return ListTile(
+      title: Text(label),
+      trailing: Text(
+        value.toString(),
+        style: const TextStyle(fontWeight: FontWeight.bold),
+      ),
+    );
+  }
+
+  Widget _beltSection() {
+    if (belts.isEmpty) {
+      return const Text(
+        'No Championships Won Yet',
+        style: TextStyle(color: Colors.grey),
+      );
+    }
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const Text(
+          'Championships',
+          style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+        ),
+        const SizedBox(height: 8),
+        ...belts.map(
+          (belt) => ListTile(
+            leading: Image.asset(
+              belt.iconPath,
+              width: 40,
+              height: 40,
+            ),
+            title: Text(belt.name),
+            subtitle: Text(belt.weightClass),
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+import 'package:flutter/material.dart';
+import '../models/belt_model.dart';
+import '../models/venue_model.dart';
+
+class FightCardWidget extends StatelessWidget {
+  final String redCorner;
+  final String blueCorner;
+  final Venue venue;
+  final bool isMainEvent;
+  final bool isPPV;
+  final List<Belt> belts;
+
+  const FightCardWidget({
+    super.key,
+    required this.redCorner,
+    required this.blueCorner,
+    required this.venue,
+    this.isMainEvent = false,
+    this.isPPV = false,
+    this.belts = const [],
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Card(
+      elevation: isMainEvent ? 8 : 2,
+      margin: const EdgeInsets.symmetric(vertical: 8),
+      child: Padding(
+        padding: const EdgeInsets.all(12),
+        child: Column(
+          children: [
+            _header(),
+            const Divider(),
+            _fighters(),
+            if (belts.isNotEmpty) _beltRow(),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _header() {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              venue.name,
+              style: const TextStyle(fontWeight: FontWeight.bold),
+            ),
+            Text(
+              venue.city,
+              style: const TextStyle(color: Colors.grey),
+            ),
+          ],
+        ),
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.end,
+          children: [
+            if (isMainEvent)
+              const Text(
+                'MAIN EVENT',
+                style: TextStyle(
+                  color: Colors.redAccent,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            if (isPPV)
+              const Text(
+                'PPV',
+                style: TextStyle(
+                  color: Colors.orange,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+          ],
+        ),
+      ],
+    );
+  }
+
+  Widget _fighters() {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 12),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          _corner(redCorner, Colors.red),
+          const Text(
+            'VS',
+            style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+          ),
+          _corner(blueCorner, Colors.blue),
+        ],
+      ),
+    );
+  }
+
+  Widget _corner(String name, Color color) {
+    return Column(
+      children: [
+        CircleAvatar(
+          backgroundColor: color,
+          child: Text(name[0]),
+        ),
+        const SizedBox(height: 6),
+        Text(
+          name,
+          style: const TextStyle(fontWeight: FontWeight.bold),
+        ),
+      ],
+    );
+  }
+
+  Widget _beltRow() {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: belts
+          .map(
+            (belt) => Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 4),
+              child: Image.asset(
+                belt.iconPath,
+                width: 32,
+                height: 32,
+              ),
+            ),
+          )
+          .toList(),
+    );
+  }
+}
+
+import 'package:flutter/material.dart';
+
+class FeeConfirmationDialog extends StatelessWidget {
+  final double grossPurse;
+  final double sanctioningFee;
+  final double promoterFee;
+
+  const FeeConfirmationDialog({
+    super.key,
+    required this.grossPurse,
+    required this.sanctioningFee,
+    required this.promoterFee,
+  });
+
+  double get netPurse =>
+      grossPurse - sanctioningFee - promoterFee;
+
+  @override
+  Widget build(BuildContext context) {
+    return AlertDialog(
+      title: const Text('Fight Purse Breakdown'),
+      content: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          _row('Gross Purse', grossPurse),
+          _row('Sanctioning Fee', -sanctioningFee),
+          _row('Promoter Fee', -promoterFee),
+          const Divider(),
+          _row(
+            'Net Payout',
+            netPurse,
+            isBold: true,
+          ),
+        ],
+      ),
+      actions: [
+        TextButton(
+          onPressed: () => Navigator.pop(context, false),
+          child: const Text('Decline'),
+        ),
+        ElevatedButton(
+          onPressed: () => Navigator.pop(context, true),
+          child: const Text('Accept'),
+        ),
+      ],
+    );
+  }
+
+  Widget _row(String label, double value, {bool isBold = false}) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 4),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Text(label),
+          Text(
+            '\$${value.toStringAsFixed(0)}',
+            style: TextStyle(
+              fontWeight: isBold ? FontWeight.bold : FontWeight.normal,
+              color: value < 0 ? Colors.redAccent : Colors.greenAccent,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+import 'package:flutter/material.dart';
+
+class PPVEstimateCard extends StatelessWidget {
+  final int projectedBuys;
+  final double pricePerBuy;
+  final double fighterSharePercent;
+
+  const PPVEstimateCard({
+    super.key,
+    required this.projectedBuys,
+    required this.pricePerBuy,
+    required this.fighterSharePercent,
+  });
+
+  double get grossRevenue => projectedBuys * pricePerBuy;
+
+  double get fighterRevenue =>
+      grossRevenue * fighterSharePercent;
+
+  @override
+  Widget build(BuildContext context) {
+    return Card(
+      elevation: 4,
+      margin: const EdgeInsets.symmetric(vertical: 8),
+      child: Padding(
+        padding: const EdgeInsets.all(16),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const Text(
+              'PPV Revenue Projection',
+              style: TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            const SizedBox(height: 12),
+            _row('Projected Buys', projectedBuys.toString()),
+            _row('Price Per Buy', '\$${pricePerBuy.toStringAsFixed(2)}'),
+            const Divider(),
+            _row(
+              'Gross Revenue',
+              '\$${grossRevenue.toStringAsFixed(0)}',
+              isBold: true,
+            ),
+            const SizedBox(height: 6),
+            _row(
+              'Fighter Share (${(fighterSharePercent * 100).toStringAsFixed(0)}%)',
+              '\$${fighterRevenue.toStringAsFixed(0)}',
+              isBold: true,
+              highlight: true,
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _row(
+    String label,
+    String value, {
+    bool isBold = false,
+    bool highlight = false,
+  }) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 4),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Text(label),
+          Text(
+            value,
+            style: TextStyle(
+              fontWeight: isBold ? FontWeight.bold : FontWeight.normal,
+              color: highlight ? Colors.orangeAccent : null,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+import 'package:flutter/material.dart';
+
+class PopularityCard extends StatelessWidget {
+  final int fanbase;
+  final int momentum;
+  final String primaryMarket;
+
+  const PopularityCard({
+    super.key,
+    required this.fanbase,
+    required this.momentum,
+    required this.primaryMarket,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Card(
+      elevation: 4,
+      margin: const EdgeInsets.symmetric(vertical: 8),
+      child: Padding(
+        padding: const EdgeInsets.all(16),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const Text(
+              'Fanbase & Popularity',
+              style: TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            const SizedBox(height: 12),
+            _metricRow('Fans', fanbase),
+            _metricRow('Momentum', momentum),
+            const SizedBox(height: 8),
+            Text(
+              'Primary Market: $primaryMarket',
+              style: const TextStyle(color: Colors.grey),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _metricRow(String label, int value) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 4),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Text(label),
+          Row(
+            children: List.generate(
+              5,
+              (index) => Icon(
+                index < (value / 20).round()
+                    ? Icons.star
+                    : Icons.star_border,
+                color: Colors.orangeAccent,
+                size: 20,
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+enum CommentaryStyle {
+  aggressive,
+  technical,
+  friendly,
+}
+
+class CommentaryPersonality {
+  final CommentaryStyle style;
+  final double excitementBias;
+  final double techniqueBias;
+  final double crowdFocusBias;
+
+  const CommentaryPersonality({
+    required this.style,
+    required this.excitementBias,
+    required this.techniqueBias,
+    required this.crowdFocusBias,
+  });
+}
+
+final Map<CommentaryStyle, CommentaryPersonality> commentaryPersonalities = {
+  CommentaryStyle.aggressive: CommentaryPersonality(
+    style: CommentaryStyle.aggressive,
+    excitementBias: 0.7,
+    techniqueBias: 0.2,
+    crowdFocusBias: 0.6,
+  ),
+  CommentaryStyle.technical: CommentaryPersonality(
+    style: CommentaryStyle.technical,
+    excitementBias: 0.3,
+    techniqueBias: 0.8,
+    crowdFocusBias: 0.2,
+  ),
+  CommentaryStyle.friendly: CommentaryPersonality(
+    style: CommentaryStyle.friendly,
+    excitementBias: 0.5,
+    techniqueBias: 0.4,
+    crowdFocusBias: 0.7,
+  ),
+};
+
+import 'dart:math';
+import 'commentary_personalities.dart';
+
+enum FightEventType {
+  punchLanded,
+  knockdown,
+  knockout,
+  momentumShift,
+  roundEnd,
+}
+
+class CommentaryManager {
+  final CommentaryPersonality personality;
+  final Random _rng = Random();
+
+  CommentaryManager(this.personality);
+
+  String getLine(FightEventType event) {
+    switch (event) {
+      case FightEventType.punchLanded:
+        return _weightedPick([
+          _line('Solid punch lands clean!', personality.excitementBias),
+          _line('Nice technical shot there.', personality.techniqueBias),
+        ]);
+
+      case FightEventType.knockdown:
+        return _weightedPick([
+          _line('He’s down! Big moment in the fight!', 0.8),
+          _line('That was perfectly timed.', 0.6),
+        ]);
+
+      case FightEventType.knockout:
+        return _weightedPick([
+          _line('IT’S OVER! A HUGE KNOCKOUT!', 1.0),
+          _line('That shot ends it immediately.', 0.9),
+        ]);
+
+      case FightEventType.momentumShift:
+        return _weightedPick([
+          _line('The tide of the fight is turning!', personality.excitementBias),
+          _line('You can feel the energy shifting.', personality.crowdFocusBias),
+        ]);
+
+      case FightEventType.roundEnd:
+        return _weightedPick([
+          _line('That was an interesting round.', 0.5),
+          _line('Both fighters showed a lot there.', 0.4),
+        ]);
+    }
+  }
+
+  String _weightedPick(List<_WeightedLine> lines) {
+    final totalWeight =
+        lines.fold<double>(0, (sum, l) => sum + l.weight);
+    double roll = _rng.nextDouble() * totalWeight;
+
+    for (final line in lines) {
+      roll -= line.weight;
+      if (roll <= 0) return line.text;
+    }
+    return lines.last.text;
+  }
+
+  _WeightedLine _line(String text, double weight) {
+    return _WeightedLine(text, weight);
+  }
+}
+
+class _WeightedLine {
+  final String text;
+  final double weight;
+
+  _WeightedLine(this.text, this.weight);
+}
+
+import 'package:flutter/material.dart';
+
+enum BoxerAnimationState {
+  idle,
+  punching,
+  hit,
+  knockedDown,
+}
+
+class BoxingCanvas extends StatefulWidget {
+  final BoxerAnimationState redState;
+  final BoxerAnimationState blueState;
+
+  const BoxingCanvas({
+    super.key,
+    required this.redState,
+    required this.blueState,
+  });
+
+  @override
+  State<BoxingCanvas> createState() => _BoxingCanvasState();
+}
+
+class _BoxingCanvasState extends State<BoxingCanvas>
+    with SingleTickerProviderStateMixin {
+  late AnimationController _controller;
+  late Animation<double> _punchAnim;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 400),
+    );
+
+    _punchAnim = Tween<double>(begin: 0, end: 1).animate(
+      CurvedAnimation(parent: _controller, curve: Curves.easeOut),
+    );
+
+    _controller.forward();
+  }
+
+  @override
+  void didUpdateWidget(covariant BoxingCanvas oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (widget.redState == BoxerAnimationState.punching ||
+        widget.blueState == BoxerAnimationState.punching) {
+      _controller.forward(from: 0);
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return AspectRatio(
+      aspectRatio: 16 / 9,
+      child: Container(
+        decoration: BoxDecoration(
+          color: Colors.black,
+          border: Border.all(color: Colors.white24),
+        ),
+        child: AnimatedBuilder(
+          animation: _punchAnim,
+          builder: (_, __) {
+            return Stack(
+              alignment: Alignment.center,
+              children: [
+                _boxer(
+                  alignment: Alignment.centerLeft,
+                  color: Colors.red,
+                  state: widget.redState,
+                ),
+                _boxer(
+                  alignment: Alignment.centerRight,
+                  color: Colors.blue,
+                  state: widget.blueState,
+                ),
+              ],
+            );
+          },
+        ),
+      ),
+    );
+  }
+
+  Widget _boxer({
+    required Alignment alignment,
+    required Color color,
+    required BoxerAnimationState state,
+  }) {
+    double offsetX = 0;
+    double offsetY = 0;
+
+    switch (state) {
+      case BoxerAnimationState.punching:
+        offsetX = alignment == Alignment.centerLeft ? 20 : -20;
+        break;
+      case BoxerAnimationState.hit:
+        offsetX = alignment == Alignment.centerLeft ? -10 : 10;
+        break;
+      case BoxerAnimationState.knockedDown:
+        offsetY = 40;
+        break;
+      case BoxerAnimationState.idle:
+        break;
+    }
+
+    return Align(
+      alignment: alignment,
+      child: Transform.translate(
+        offset: Offset(offsetX * _punchAnim.value, offsetY),
+        child: Container(
+          width: 80,
+          height: 120,
+          decoration: BoxDecoration(
+            color: color,
+            borderRadius: BorderRadius.circular(12),
+          ),
+        ),
+      ),
+    );
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+}
+
+import '../engine/fight_engine_with_belts.dart';
+import 'boxing_canvas.dart';
+
+class AnimationAdapter {
+  BoxerAnimationState mapEventToAnimation(
+    FightEngineEvent event,
+    bool isRedCorner,
+  ) {
+    switch (event) {
+      case FightEngineEvent.punchLanded:
+        return BoxerAnimationState.punching;
+
+      case FightEngineEvent.hitTaken:
+        return BoxerAnimationState.hit;
+
+      case FightEngineEvent.knockdown:
+        return BoxerAnimationState.knockedDown;
+
+      case FightEngineEvent.idle:
+      default:
+        return BoxerAnimationState.idle;
+    }
+  }
+}
